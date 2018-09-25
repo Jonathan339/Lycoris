@@ -21,10 +21,7 @@ class Registry_windows:
             self.lista_apps.append(EnumKey(self.openkey(), i))
             #print  (EnumKey(self.openkey(), i))
         return self.lista_apps
-        
-                  
-                
-            
+                    
     def equal(self, otro):
         if self.browser.__eq__(otro): 
             return  True 

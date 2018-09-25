@@ -13,9 +13,7 @@ class RegWindows:
         return akey
     
     def list_programs(self) -> list:
-        """
-        Devuelve una lista de aplicaciones instaladas
-        """
+        """Returns a list of installed applications."""
         self.lista_apps=[]
         for i in range(0, QueryInfoKey(self.openkey())[0]):
             self.lista_apps.append(EnumKey(self.openkey(), i))
@@ -23,9 +21,7 @@ class RegWindows:
         return self.lista_apps
 
     def browser_installed(self):
-        '''
-        Devuelve una lista de los navegadores instalados.
-        '''
+        '''Returns a list of installed browsers.'''
         nav = []
         for browser in self.list_programs():
             if browser in browser_name:
@@ -35,5 +31,4 @@ class RegWindows:
         
 if __name__ == '__main__':
     c = RegWindows()
-    #print(c.ListaApps())
     print(c.browser_installed())

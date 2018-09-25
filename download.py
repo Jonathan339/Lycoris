@@ -1,31 +1,32 @@
-from io import BytesIO
 import logging
 import os
-from pathlib import Path
 import stat
 import sys
-from urllib import request
-from zipfile import ZipFile
 from constants import *
 from info import *
+from io import BytesIO
+from pathlib import Path
+from urllib import request
+from zipfile import ZipFile
+
 
 class Download:
 
-	def download_zip(self, url: str) -> bytes:
-		"""Download data from url."""
-		logger.warning('start download.\n'
-			'Download may take a few minutes.')
-		with request.urlopen(url) as f:
-			data = f.read()
-			logger.warning('Download done.')
-			return data
+    def download_zip(self, url: str) -> bytes:
+        """Download data from url."""
+        logger.warning('start download.\n'
+            'Download may take a few minutes.')
+        with request.urlopen(url) as f:
+            data = f.read()
+            logger.warning('Download done.')
+            return data
 
-	def extract_zip(self, data: bytes, path: Path) -> None:
-		"""Extract zipped data to path."""
+    def extract_zip(self, data: bytes, path: Path) -> None:
+        """Extract zipped data to path."""
         if self.curret_platform() == 'mac':
             import subprocess
             import shutil
-            zip_path = path 
+            zip_path = path
             if not path.exists():
                 path.mkdir(parents=True)
                 with zip_path.open('wb') as f:
