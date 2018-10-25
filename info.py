@@ -21,7 +21,7 @@ class Info:
             headers = {
             'user-agent': '''Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/66.0.3359.181 Chrome/66.0.3359.181 Safari/537.36'''}
             response = requests.get(self._url, headers=headers)
-            soup = BeautifulSoup(response.content, 'lxml')
+            soup = BeautifulSoup(response.content, 'html.parser')
         except Exception as e:
             raise e('Error: ', e)
         return soup
@@ -112,7 +112,7 @@ class InfoChromeDriver(Info):
     def get_version(self) -> str:
         try:
             response = requests.get(self._url)
-            soup = BeautifulSoup(response.content, 'lxml')
+            soup = BeautifulSoup(response.content, 'html.parser')
             self._version = soup.get_text(strip=True)
         except Exception as e:
             raise e('Error: ', e)
@@ -122,3 +122,5 @@ class InfoChromeDriver(Info):
         return downloadURLs[self.get_system()].format(self.get_version())
 
 
+a  = InfoChromeDriver()
+print(a.info_driver())

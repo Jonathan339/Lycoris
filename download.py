@@ -9,17 +9,21 @@ from pathlib import Path
 from urllib import request
 from zipfile import ZipFile
 
+logger = logging.getLogger(__name__)
 
 class Download:
 
     def download_zip(self, url: str) -> bytes:
         """Download data from url."""
-        logger.warning('start download.\n'
+        try:
+            logger.warning('start download.\n'
             'Download may take a few minutes.')
-        with request.urlopen(url) as f:
-            data = f.read()
+            with request.urlopen(url) as f:
+                data = f.read()
             logger.warning('Download done.')
             return data
+        except Exception as e:
+            logger.warning('Error: {}'.format(e))        
 
     def extract_zip(self, data: bytes, path: Path) -> None:
         """Extract zipped data to path."""
