@@ -2,7 +2,7 @@ from winreg import HKEY_LOCAL_MACHINE, OpenKey, ConnectRegistry, EnumKey,QueryIn
 
 browser_name = ['Opera Software', 'Mozilla', 'Google']
 
-class RegWindows:
+class Windows:
     
     def __init__(self) -> None:
         self.reg = ConnectRegistry(None,HKEY_LOCAL_MACHINE)

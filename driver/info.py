@@ -2,7 +2,7 @@ import platform, os
 import requests
 import sys
 from bs4 import BeautifulSoup
-from constants import *
+from driver.constants import *
 from pathlib import Path
 
 class Info:
