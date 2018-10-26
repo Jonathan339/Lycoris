@@ -122,5 +122,3 @@ class InfoChromeDriver(Info):
         return downloadURLs[self.get_system()].format(self.get_version())
 
 
-a  = InfoChromeDriver()
-print(a.info_driver())

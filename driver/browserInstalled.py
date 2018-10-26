@@ -20,15 +20,10 @@ class RegWindows:
             #print  (EnumKey(self.openkey(), i))
         return self.lista_apps
 
-    def browser_installed(self):
+    def browser(self):
         '''Returns a list of installed browsers.'''
         nav = []
         for browser in self.list_programs():
             if browser in browser_name:
                 nav.append(browser)
         return nav
-
-        
-if __name__ == '__main__':
-    c = RegWindows()
-    print(c.browser_installed())
