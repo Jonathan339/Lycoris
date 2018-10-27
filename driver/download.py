@@ -2,12 +2,12 @@ import logging
 import os
 import stat
 import sys
-from constants import *
-from info import *
 from io import BytesIO
 from pathlib import Path
 from urllib import request
 from zipfile import ZipFile
+from driver.constants import *
+from driver.info import *
 
 logger = logging.getLogger(__name__)
 
