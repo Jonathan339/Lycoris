@@ -4,6 +4,7 @@ import os
 from driver.info import InfoChromeDriver
 from driver.info import InfoGeckoDriver
 import requests
+import zipfile
 class Driver:
 
     def __init__(self, driver: str) -> None:
@@ -22,16 +23,23 @@ class Driver:
     def file_path(self) -> str:
     	return os.path.normpath(self.folder_path() + '/' + self.local_filename())
 
+    def extract_file(self):
+    	try:
+    		zip_file = zipfile.ZipFile(self.file_path())
+    		zip_file.extractall(self.folder_path())
+    	except Exception as e:
+    		logging.warning('[!] Error: {}'.format(e))
+    	finally:
+    		zip_file.close()
+    	return zipfile.ZipFile(self.file_path())
+
     def download(self) -> None:
         """Downlaod and extract the browser."""
         try:
         	Path(self.folder_path()).mkdir(parents=True, exist_ok=True)
         	if os.path.exists(self.folder_path()):
         		self.download_zip(self.InfoChromeDriver.get_link())
-        		print('se encontro path')
-        	else:
-        		print('no se encontro.')
-
+        		self.extract_file()
         except Exception as e:
         	logging.warning('[!] Error: {}'.format(e))
         
@@ -50,6 +58,3 @@ class Driver:
         		pass
         except Exception as e:
         	logging.warning('[!] Error: {}'.format(e))
-
-    def extract_file(self):
-    	pass
