@@ -1,54 +1,55 @@
 import logging
 from pathlib import Path
 import os
-from driver.download import Download
 from driver.info import InfoChromeDriver
 from driver.info import InfoGeckoDriver
-
+import requests
 class Driver:
 
     def __init__(self, driver: str) -> None:
         self.driver = driver
         self.InfoGeckoDriver = InfoGeckoDriver()
         self.InfoChromeDriver = InfoChromeDriver()
-        self.Download = Download()
-        self.path = os.path.normpath(str(Path.home()) + '\.Driver')
         self.download()
+
+    def folder_path(self) -> str:
+    	return os.path.normpath(str(Path.home())+'/'+ '.Driver')
+
+    def local_filename(self) -> str:
+    	'''return the filename'''
+    	return self.InfoChromeDriver.get_link().split('/')[-1]
+
+    def file_path(self) -> str:
+    	return os.path.normpath(self.folder_path() + '/' + self.local_filename())
 
     def download(self) -> None:
         """Downlaod and extract the browser."""
-        extract_zip(self.download_zip(self.InfoChromeDriver.get_url()), self.path)
+        try:
+        	Path(self.folder_path()).mkdir(parents=True, exist_ok=True)
+        	if os.path.exists(self.folder_path()):
+        		self.download_zip(self.InfoChromeDriver.get_link())
+        		print('se encontro path')
+        	else:
+        		print('no se encontro.')
 
-    def download(self):
+        except Exception as e:
+        	logging.warning('[!] Error: {}'.format(e))
+        
+    def download_zip(self, url):
         '''Download the driver for Chrome or Gecko.'''
-        if self.driver == 'chrome' or self.driver == 'CHROME':
-            self.Download.download_zip(self.InfoChromeDriver.get_link())
-            
-        else:
-            self.Download.download_zip(self.InfoGeckoDriver.get_link())
+        try:
+        	if self.driver == 'chrome' or self.driver == 'CHROME':
+        		# NOTE the stream=True parameter
+        		r = requests.get(url, stream=True)
+        		with open(self.file_path(), 'wb') as f:
+        			for chunk in r.iter_content(chunk_size=1024):
+        				if chunk: # filter out keep-alive new chunks
+        					f.write(chunk)
+        		return self.file_path()
+        	else:
+        		pass
+        except Exception as e:
+        	logging.warning('[!] Error: {}'.format(e))
 
-    def extract_zip(self, data: bytes, path: Path) -> None:
-        """Extract zipped data to path."""
-        if self.curret_platform() == 'mac':
-            import subprocess
-            import shutil
-            zip_path = path
-            if not path.exists():
-                path.mkdir(parents=True)
-                with zip_path.open('wb') as f:
-                    f.write(data)
-            if not shutil.which('unzip'):
-                raise OSError('Failed to automatically extract zip.'
-                              f'Please unzip {zip_path} manually.')
-                subprocess.run(['unzip', str(zip_path)], cwd=str(path))
-            if self.excutable().exists() and zip_path.exists():
-                zip_path.unlink()
-        else:
-            with ZipFile(BytesIO(data)) as zf:
-                zf.extractall(str(path))
-        exec_path = self.excutable()
-        if not exec_path.exists():
-            raise IOError('Failed to extract file.')
-        exec_path.chmod(exec_path.stat().st_mode | stat.S_IXOTH | stat.S_IXGRP |
-                        stat.S_IXUSR)
-        logger.warning(f'extracted to: {path}')
+    def extract_file(self):
+    	pass
