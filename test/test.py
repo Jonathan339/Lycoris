@@ -25,3 +25,4 @@ print('https://chromedriver.storage.googleapis.com/2.43/chromedriver_win32.zip')
 #https://storage.googleapis.com/Win_x64/2.43/chrome-win32.zip
 #https://chromedriver.storage.googleapis.com/2.43/chromedriver_win32.zip
 a = Driver('chrome')
+b = Driver('gecko')

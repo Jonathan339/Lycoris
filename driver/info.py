@@ -1,9 +1,11 @@
-import platform, os
+import platform
+import os
 import requests
 import sys
 from bs4 import BeautifulSoup
 from driver.constants import *
 from pathlib import Path
+
 
 class Info:
 
@@ -19,7 +21,7 @@ class Info:
         '''Connect to the website'''
         try:
             headers = {
-            'user-agent': '''Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/66.0.3359.181 Chrome/66.0.3359.181 Safari/537.36'''}
+                'user-agent': '''Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/66.0.3359.181 Chrome/66.0.3359.181 Safari/537.36'''}
             response = requests.get(self._url, headers=headers)
             soup = BeautifulSoup(response.content, 'html.parser')
         except Exception as e:
@@ -48,7 +50,7 @@ class Info:
                 self._size = st.st_size
             except Exception as e:
                 print('Error: {}'.format(e))
-            return self._size 
+            return self._size
         else:
             self._size
 
@@ -70,16 +72,16 @@ class Info:
 
     def info_driver(self) -> dict:
         self._driver_data = {'Name: ': self.get_name(),
-                            'Version: ': self.get_version(),
-                            'Link: ': self.get_link(),
-                            'Size: ': self.get_size(),
-                            'System: ': self.get_system()}
+                             'Version: ': self.get_version(),
+                             'Link: ': self.get_link(),
+                             'Size: ': self.get_size(),
+                             'System: ': self.get_system()}
         return self._driver_data
 
 
 class InfoGeckoDriver(Info):
 
-    def __init__(self, url: str=LINK_GECKODRIVER ):
+    def __init__(self, url: str=LINK_GECKODRIVER):
         super().__init__(url)
 
     def get_name(self) -> str:
@@ -88,21 +90,26 @@ class InfoGeckoDriver(Info):
 
     def get_version(self)->str:
         try:
-            self._version = self.connection().find('div', {'class': 'f1 flex-auto min-width-0 text-normal'}).get_text("/", strip = True)
+            self._version = self.connection().find(
+                'div', {'class': 'f1 flex-auto min-width-0 text-normal'}).get_text("/", strip=True)
         except ConnectionError as e:
             raise ('Error: {}'.format(e))
         return str(self._version)
 
     def get_link(self) -> str:
         try:
-            self._link = """https://github.com/mozilla/geckodriver/releases/download/{}/geckodriver-{}-{}.tar.gz""".format(self.get_version(), self.get_version(),self.get_system())
+            if self.get_system() == 'win64' or self.get_system() == 'win32':
+                return """https://github.com/mozilla/geckodriver/releases/download/{}/geckodriver-{}-{}.zip""".format(self.get_version(), self.get_version(), self.get_system())
+            elif self.get_system() == 'linux64' or self.get_system() == 'linux32' or self.get_system() == 'mac64' or self.get_system() == 'arm7hf':
+                return """https://github.com/mozilla/geckodriver/releases/download/{}/geckodriver-{}-{}.tar.gz""".format(self.get_version(), self.get_version(), self.get_system())
         except Exception as e:
             print("Error: {0}".format(e))
         return self._link
 
+
 class InfoChromeDriver(Info):
 
-    def __init__(self, url = LINK_CHROMEDDRIVER_LAST_RELASE):
+    def __init__(self, url=LINK_CHROMEDDRIVER_LAST_RELASE):
         super().__init__(url)
 
     def get_name(self) -> str:
@@ -120,5 +127,3 @@ class InfoChromeDriver(Info):
 
     def get_link(self) -> str:
         return downloadURLs[self.get_system()].format(self.get_version())
-
-
