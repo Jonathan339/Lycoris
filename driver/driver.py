@@ -3,7 +3,7 @@ import os
 import requests
 import tarfile
 import zipfile
-
+import glob
 from driver.info import InfoChromeDriver
 from driver.info import InfoGeckoDriver
 from pathlib import Path
@@ -34,6 +34,11 @@ class Driver:
 
     def file_path(self) -> str:
         return os.path.normpath(self.folder_path() + '/' + self.local_filename())
+
+    def excutable(self):
+    	
+    	for filename in glob.iglob(os.path.normpath(self.folder_path()+'/'+'*.exe'), recursive=True):
+    		print(filename)
 
     def extract_file(self):
         '''Extract files tar.gz and zip.'''
