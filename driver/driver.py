@@ -1,9 +1,12 @@
+import glob
 import logging
 import os
 import requests
 import tarfile
 import zipfile
-import glob
+
+from driver.constants import *
+from driver.info import Info
 from driver.info import InfoChromeDriver
 from driver.info import InfoGeckoDriver
 from pathlib import Path
@@ -13,6 +16,7 @@ class Driver:
 
     def __init__(self, driver: str) -> None:
         self.driver = driver
+        
         Path(self.folder_path()).mkdir(parents=True, exist_ok=True)
         self.download_zip()
 
@@ -36,9 +40,10 @@ class Driver:
         return os.path.normpath(self.folder_path() + '/' + self.local_filename())
 
     def excutable(self):
-    	
-    	for filename in glob.iglob(os.path.normpath(self.folder_path()+'/'+'*.exe'), recursive=True):
-    		print(filename)
+        if self.instance_driver() == InfoChromeDriver():
+        	return chromium_executable[str(self.Info.get_system())].format(self.folder_path())
+        else:
+        	return firefox_executable[str(self.Info.get_system())].format(self.folder_path())
 
     def extract_file(self):
         '''Extract files tar.gz and zip.'''
@@ -49,11 +54,11 @@ class Driver:
                     zip_file = zipfile.ZipFile(self.file_path())
                     return zip_file.extractall(self.folder_path())
                 elif self.file_path().endswith("tar"):
-                	tar = tarfile.open(self.file_path(), "r:gz")
-                	for tar_info in tar:
-                		tar.extract(self.folder_path())
+                    tar = tarfile.open(self.file_path(), "r:gz")
+                    for tar_info in tar:
+                        tar.extract(self.folder_path())
         except Exception as e:
-                logging.warning('[!] Error: {}'.format(e))
+            logging.warning('[!] Error: {}'.format(e))
         finally:
             zip_file.close()
 

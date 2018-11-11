@@ -1,20 +1,25 @@
-from winreg import HKEY_LOCAL_MACHINE, OpenKey, ConnectRegistry, EnumKey,QueryInfoKey
+from winreg import ConnectRegistry
+from winreg import EnumKey
+from winreg import HKEY_LOCAL_MACHINE
+from winreg import OpenKey
+from winreg import QueryInfoKey
 
 browser_name = ['Opera Software', 'Mozilla', 'Google']
 
+
 class Windows:
-    
+
     def __init__(self) -> None:
-        self.reg = ConnectRegistry(None,HKEY_LOCAL_MACHINE)
-        
+        self.reg = ConnectRegistry(None, HKEY_LOCAL_MACHINE)
+
     def openkey(self):
         """Open the key registry"""
         akey = OpenKey(self.reg, r"SOFTWARE")
         return akey
-    
+
     def list_programs(self) -> list:
         """Returns a list of installed applications."""
-        self.lista_apps=[]
+        self.lista_apps = []
         for i in range(0, QueryInfoKey(self.openkey())[0]):
             self.lista_apps.append(EnumKey(self.openkey(), i))
             #print  (EnumKey(self.openkey(), i))
