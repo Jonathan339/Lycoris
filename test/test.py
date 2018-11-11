@@ -29,14 +29,14 @@ print('https://chromedriver.storage.googleapis.com/2.43/chromedriver_win32.zip')
 # https://chromedriver.storage.googleapis.com/2.43/chromedriver_win32.zip
 print('-------------------------------------')
 a = Driver('chrome')
-print(a.file_path())
+
 print(a.local_filename())
-print(a.excutable())
+print(a.executable())
 print('-------------------------------------')
 b = Driver('gecko')
 print(b.file_path())
 print(b.local_filename())
-print(b.excutable())
+print(b.executable())
 #import tarfile
 #tar = tarfile.open(b.file_path(), "r:gz")
 #tar.extractall()
