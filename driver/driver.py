@@ -16,7 +16,6 @@ class Driver:
 
     def __init__(self, driver: str) -> None:
         self.driver = driver
-        
         Path(self.folder_path()).mkdir(parents=True, exist_ok=True)
         self.download_zip()
 
@@ -40,10 +39,10 @@ class Driver:
         return os.path.normpath(self.folder_path() + '/' + self.local_filename())
 
     def excutable(self):
-        if self.instance_driver() == InfoChromeDriver():
-        	return chromium_executable[str(self.Info.get_system())].format(self.folder_path())
+        if self.instance_driver():
+        	return os.path.normpath(chromium_executable[str(self.instance_driver().get_system())].format(self.folder_path()))
         else:
-        	return firefox_executable[str(self.Info.get_system())].format(self.folder_path())
+        	return os.path.normpath(firefox_executable[str(self.instance_driver().get_system())].format(self.folder_path()))
 
     def extract_file(self):
         '''Extract files tar.gz and zip.'''

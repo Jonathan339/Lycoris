@@ -6,12 +6,8 @@ from pathlib import Path
 
 DOWNLOADS_FOLDER = Path.home() / '.Driver' / 'local-browser'
 #-------------------------------------------------------
-# https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz
-# https://github.com/mozilla/geckodriver/releases/download/{}/geckodriver-{}-{}.zip
-# https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-macos.tar.gz
-# https://github.com/mozilla/geckodriver/releases/download//v0.23.0/geckodriver-v0.23.0-win64.zip
-# https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-win64.zip
-DEFAULT_DOWNLOAD_HOST_GITHUB = 'https://github.com/mozilla/geckodriver/releases/download'
+
+DEFAULT_DOWNLOAD_HOST_GITHUB = 'https://github.com/mozilla/geckodriver/releases/download/'
 download_urls_firefox = {
     'linux32': f'{DEFAULT_DOWNLOAD_HOST_GITHUB}/' + '{}' + '/geckodriver-{}-{}.tar.gz',
     'linux64': f'{DEFAULT_DOWNLOAD_HOST_GITHUB}/' + '{}' + '/geckodriver-{}-{}.tar.gz',
@@ -32,16 +28,16 @@ download_urls_chromium = {
 #--------------------------------------------------------
 
 chromium_executable = {
-    'linux32': "{} / 'chrome'",
-    'linux64': "{} / 'chrome'",
-    'mac64': "({} / 'chrome-mac' / 'Chromium.app' / 'Contents' / 'MacOS' / 'Chromium')",
-    'win64': "{} / 'chrome.exe'"
+    'linux32': "{}/chromedriver",
+    'linux64': "{}/chromedriver",
+    'mac64': "({}/chrome-mac/Chromium.app/Contents/MacOS/Chromium)",
+    'win64': "{}/chromedriver.exe"
 }
 #---------------------------------------------------------
 
 firefox_executable = {
-    'linux32': "{} / 'firefox'",
-    'linux64': "{} / 'firefox'",
-    'mac64': "({} / 'firefox-mac' / 'Firefox.app' / 'Contents' / 'MacOS' / 'Firefox')",
-    'win64': "{} / 'firefox.exe'"
+    'linux32': "{}/geckodriver",
+    'linux64': "{}/geckodriver",
+    'mac64': "({}/firefox-mac/Firefox.app/Contents/MacOS/Firefox)",
+    'win64': "{}/geckodriver.exe"
 }

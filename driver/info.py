@@ -97,6 +97,16 @@ class InfoGeckoDriver(Info):
             raise ('Error: {}'.format(e))
         return str(self._version)
 
+    def get_link2(self) -> str:
+        try:
+            if self.get_system() == 'win64' or self.get_system() == 'win32':
+                return """https://github.com/mozilla/geckodriver/releases/download/{}/geckodriver-{}-{}.zip""".format(self.get_version(), self.get_version(), self.get_system())
+            elif self.get_system() == 'linux64' or self.get_system() == 'linux32' or self.get_system() == 'mac64' or self.get_system() == 'arm7hf':
+                return """https://github.com/mozilla/geckodriver/releases/download/{}/geckodriver-{}-{}.tar.gz""".format(self.get_version(), self.get_version(), self.get_system())
+        except Exception as e:
+            print("Error: {0}".format(e))
+        return self._link
+
     def get_link(self):
         return download_urls_firefox[self.get_system()].format(self.get_version(), self.get_version(), self.get_system())
 
