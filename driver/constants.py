@@ -7,7 +7,7 @@ from pathlib import Path
 DOWNLOADS_FOLDER = Path.home() / '.Driver' / 'local-browser'
 #-------------------------------------------------------
 
-DEFAULT_DOWNLOAD_HOST_GITHUB = 'https://github.com/mozilla/geckodriver/releases/download/'
+DEFAULT_DOWNLOAD_HOST_GITHUB = 'https://github.com/mozilla/geckodriver/releases/download'
 download_urls_firefox = {
     'linux32': f'{DEFAULT_DOWNLOAD_HOST_GITHUB}/' + '{}' + '/geckodriver-{}-{}.tar.gz',
     'linux64': f'{DEFAULT_DOWNLOAD_HOST_GITHUB}/' + '{}' + '/geckodriver-{}-{}.tar.gz',

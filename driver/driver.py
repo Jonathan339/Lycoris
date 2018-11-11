@@ -39,27 +39,46 @@ class Driver:
         return os.path.normpath(self.folder_path() + '/' + self.local_filename())
 
     def excutable(self):
-        if self.instance_driver():
-        	return os.path.normpath(chromium_executable[str(self.instance_driver().get_system())].format(self.folder_path()))
-        else:
-        	return os.path.normpath(firefox_executable[str(self.instance_driver().get_system())].format(self.folder_path()))
+        if self.instance_driver() == InfoChromeDriver():
+            return os.path.normpath(chromium_executable[str(self.instance_driver().get_system())].format(self.folder_path()))
+        if self.instance_driver() == InfoGeckoDriver():
+            return os.path.normpath(firefox_executable[str(self.instance_driver().get_system())].format(self.folder_path()))
 
     def extract_file(self):
         '''Extract files tar.gz and zip.'''
         try:
             Path(self.folder_path()).mkdir(parents=True, exist_ok=True)
             if os.path.exists(self.folder_path()):
-                if self.file_path().endswith("zip"):
+                if self.file_path().endswith('zip'):
                     zip_file = zipfile.ZipFile(self.file_path())
-                    return zip_file.extractall(self.folder_path())
-                elif self.file_path().endswith("tar"):
+                    zip_file.extractall(self.folder_path())
+                    zip_file.close()
+
+                if self.file_path().endswith('tar.gz'):
                     tar = tarfile.open(self.file_path(), "r:gz")
-                    for tar_info in tar:
-                        tar.extract(self.folder_path())
+                    tar.extractall(self.folder_path())
+                    tar.close()
         except Exception as e:
             logging.warning('[!] Error: {}'.format(e))
-        finally:
-            zip_file.close()
+
+    def extract_zip(self):
+        try:
+            if self.file_path().endswith('zip'):
+                zip_file = zipfile.ZipFile(self.file_path())
+                zip_file.extractall(self.folder_path())
+                zip_file.close()
+        except Exception as e:
+            logging.warning('[!] Error: {}'.format(e))
+
+    def extract_tar(self):
+        try:
+            if os.path.exists(self.folder_path()):
+                if self.file_path().endswith('tar.gz'):
+                    tar = tarfile.open(self.file_path(), "r:gz")
+                    tar.extractall()
+                    tar.close()
+        except Exception as e:
+            logging.warning('[!] Error: {}'.format(e))
 
     def download(self, url):
         try:
