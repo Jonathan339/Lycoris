@@ -29,7 +29,6 @@ print('https://chromedriver.storage.googleapis.com/2.43/chromedriver_win32.zip')
 # https://chromedriver.storage.googleapis.com/2.43/chromedriver_win32.zip
 print('-------------------------------------')
 a = Driver('chrome')
-
 print(a.local_filename())
 print(a.executable())
 print('-------------------------------------')

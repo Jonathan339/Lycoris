@@ -30,7 +30,7 @@ class Driver:
             logging.warning('[!] Error: {}'.format(e))
 
     def folder_path(self) -> str:
-        return os.path.normpath(str(Path.home()) + '/' + '.Driver')
+        return os.path.normpath(str(Path.home()) + '/' + '.driver')
 
     def local_filename(self) -> str:
         """ Return the file name."""
@@ -39,12 +39,12 @@ class Driver:
     def file_path(self) -> str:
         """ Returns the path of the file."""
         return os.path.normpath(self.folder_path() + '/' + self.local_filename())
-        
+
     def executable(self):
         """ Return the path of the executable."""
-        if self.instance_driver().instance() == 'InfoChromeDriver':
+        if isinstance( InfoChromeDriver(), self.instance_driver()):
             return os.path.normpath(chromium_executable[str(self.instance_driver().get_system())].format(self.folder_path()))
-        elif self.instance_driver() == InfoGeckoDriver():
+        else:
             return os.path.normpath(firefox_executable[str(self.instance_driver().get_system())].format(self.folder_path()))
 
     def extract_file(self):
@@ -84,6 +84,7 @@ class Driver:
                     self.extract_file()
             elif self.driver == 'gecko' or self.driver == 'Gecko' or self.driver == 'GECKO':
                 if os.path.exists(self.folder_path()):
+                    logging.info('This takes a mule, thanks for waiting.')
                     self.download(self.instance_driver().get_link())
                     self.extract_file()
         except Exception as e:

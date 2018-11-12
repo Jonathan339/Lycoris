@@ -1,10 +1,7 @@
 #--------------last relase---------------------
 LINK_GECKODRIVER = 'https://github.com/mozilla/geckodriver/releases'
 LINK_CHROMEDDRIVER_LAST_RELASE = 'https://chromedriver.storage.googleapis.com/LATEST_RELEASE'
-#----------------------------------------------
-from pathlib import Path
 
-DOWNLOADS_FOLDER = Path.home() / '.Driver' / 'local-browser'
 #-------------------------------------------------------
 
 DEFAULT_DOWNLOAD_HOST_GITHUB = 'https://github.com/mozilla/geckodriver/releases/download'
