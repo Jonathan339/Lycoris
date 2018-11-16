@@ -7,14 +7,11 @@ sys.path.insert(0, dirname(dirname(__file__)))
 
 #--------------------------
 
-#from driver.browserInstalled import Windows
 from driver.driver import Driver
 from driver.info import Info
 from driver.info import InfoChromeDriver
 from driver.info import InfoGeckoDriver
-#from driver.regedit import Registry_windows
 
-#print(Registry_windows().ListaApps())
 print('-------------------------------------')
 #print(Windows().browser())
 print('-------------------------------------')

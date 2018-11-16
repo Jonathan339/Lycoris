@@ -40,9 +40,6 @@ class Driver:
         """ Returns the path of the file."""
         return os.path.normpath(self.folder_path() + '/' + self.local_filename())
 
-    def loc(self):
-        return self.instance_driver().__class__.__name__
-
     def executable(self):
         """ Return the path of the executable."""
         if str(self.instance_driver().__class__.__name__) == 'InfoChromeDriver':
