@@ -44,7 +44,6 @@ class Info:
     def get_size(self, filename=None) -> int:
         """get size of the file in bytes."""
         if filename:
-
             try:
                 import os
                 st = os.stat(filename)
