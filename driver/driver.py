@@ -80,11 +80,12 @@ class Driver:
         try:
             if self.driver == 'chrome' or self.driver == 'Chrome' or self.driver == 'CHROME':
                 if os.path.exists(self.folder_path()):
+                    logging.warning('This takes a mule, thanks for waiting.')
                     self.download(self.instance_driver().get_link())
                     self.extract_file()
             elif self.driver == 'gecko' or self.driver == 'Gecko' or self.driver == 'GECKO':
                 if os.path.exists(self.folder_path()):
-                    logging.info('This takes a mule, thanks for waiting.')
+                    logging.warning('This takes a mule, thanks for waiting.')
                     self.download(self.instance_driver().get_link())
                     self.extract_file()
         except Exception as e:

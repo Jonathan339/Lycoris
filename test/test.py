@@ -34,7 +34,3 @@ b = Driver('gecko')
 print(b.file_path())
 print(b.local_filename())
 print(b.executable())
-#import tarfile
-#tar = tarfile.open(b.file_path(), "r:gz")
-#tar.extractall()
-#tar.close()

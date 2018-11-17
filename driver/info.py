@@ -1,3 +1,4 @@
+import logging
 import os
 import platform
 import requests
@@ -26,7 +27,7 @@ class Info:
             response = requests.get(self._url, headers=headers)
             soup = BeautifulSoup(response.content, 'lxml')
         except Exception as e:
-            raise e('Error: ', e)
+            logging.warning('[!] Error: {}'.format(e))
         return soup
 
     def get_name(self) -> str:
@@ -42,14 +43,14 @@ class Info:
         return filter in other
 
     def get_size(self, filename=None) -> int:
-        """get size of the file in bytes."""
+        """ Get size of the file in bytes."""
         if filename:
             try:
                 import os
                 st = os.stat(filename)
                 self._size = st.st_size
             except Exception as e:
-                print('Error: {}'.format(e))
+                logging.warning('[!] Error: {}'.format(e))
             return self._size
         else:
             self._size
@@ -68,7 +69,7 @@ class Info:
                     return 'win64'
                 return 'win32'
         except Exception as e:
-            raise OSError('Unsupported platform: ' + sys.platform())
+            logging.warning('[!] Error: {}'.format(e))
 
     def info_driver(self) -> dict:
         self._driver_data = {'Name: ': self.get_name(),
@@ -93,7 +94,7 @@ class InfoGeckoDriver(Info):
             self._version = self.connection().find(
                 'div', {'class': 'f1 flex-auto min-width-0 text-normal'}).get_text("/", strip=True)
         except ConnectionError as e:
-            raise ('Error: {}'.format(e))
+            logging.warning('[!] Error: {}'.format(e))
         return str(self._version)
 
     def get_link(self):
@@ -115,7 +116,7 @@ class InfoChromeDriver(Info):
             soup = BeautifulSoup(response.content, 'lxml')
             self._version = soup.get_text(strip=True)
         except Exception as e:
-            raise e('Error: ', e)
+            logging.warning('[!] Error: {}'.format(e))
         return self._version
 
     def get_link(self) -> str:
