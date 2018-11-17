@@ -97,6 +97,10 @@ class InfoGeckoDriver(Info):
             logging.warning('[!] Error: {}'.format(e))
         return str(self._version)
 
+    def get_size(self):
+        soup = self.connection().find('li',{'class': 'd-block py-1 py-md-2'})
+        return soup.find('small', {'class': 'text-gray flex-shrink-0'}).text
+
     def get_link(self):
         return download_urls_firefox[self.get_system()].format(self.get_version(), self.get_version(), self.get_system())
 
