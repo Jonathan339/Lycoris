@@ -40,7 +40,7 @@ name=”WebDriver”,
 version="0.0.1",
 description=”Este paquete descarga los webdrivers de chrome y firefox.”,
 author=”Jonathan David Dominguez”,
-author_email=”jonathan.d.dominguez@hotmail.com”,
+author_email=”dominguez.jonathan.david@gmail.com”,
 url=””,
 
 scripts=[], # Si queremos integrar scripts dentro del paquete, Ejemplo: scripts[‘script.py’]
@@ -48,4 +48,27 @@ packages=packages,
 package_dir=package_dir,
 #packages=[“driver”,”test”] # Indicar los paquetes que van a formar parte de él, Paquete + Subpaquetes
 test_suite='tests'
+)
+
+# -*- coding: utf-8 -*-
+
+from setuptools import setup, find_packages
+
+
+with open('README.rst') as f:
+    readme = f.read()
+
+with open('LICENSE.txt') as f:
+    license = f.read()
+
+setup(
+    name='sample',
+    version='0.1.0',
+    description='Sample package description',
+    long_description=readme,
+    author='<author_name>',
+    author_email='author@example.com',
+    url='',
+    license=license,
+    packages=find_packages(exclude=('tests'))
 )
