@@ -8,18 +8,19 @@ sys.path.insert(0, dirname(dirname(__file__)))
 #--------------------------
 
 from driver.lycoris import Lycoris
-from driver.common.info import InfoChromeDriver
-from driver.common.info import InfoGeckoDriver
+from driver.common.info import Info
+from driver.chrome.chrome import Chrome
+from driver.firefox.firefox import Firefox
 
 print('-------------------------------------')
 #print(Windows().browser())
 print('-------------------------------------')
-print(InfoGeckoDriver().info_driver())
+print(Firefox().info_driver())
 print('-------------------------------------')
-print(InfoChromeDriver().info_driver())
+print(Chrome().info_driver())
 print('-------------------------------------')
-print(InfoChromeDriver().get_link())
-print(InfoChromeDriver())
+print(Chrome().get_link())
+print(Chrome())
 print('https://chromedriver.storage.googleapis.com/2.43/chromedriver_win32.zip')
 # https://storage.googleapis.com/Win_x64/2.43/chrome-win32.zip
 # https://chromedriver.storage.googleapis.com/2.43/chromedriver_win32.zip
@@ -30,6 +31,6 @@ print(a.executable())
 print('-------------------------------------')
 b = Lycoris('gecko')
 
-print(b.file_path)
+print(b.file_path())
 print(b.local_filename())
 print(b.executable())

@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-class Chrome:
-
-    def __init__(self):
-        pass
-
-
-=======
 import logging
 
 import requests
@@ -33,4 +25,3 @@ class Chrome(Info):
 
     def get_link(self) -> str:
         return download_urls_chromium[self.get_system()].format(self.get_version())
->>>>>>> created packeges chrome and firefox.
