@@ -1,13 +1,16 @@
 import logging
 
 import requests
+
 from bs4 import BeautifulSoup
-from driver.common.constants import LINK_CHROMEDDRIVER_LAST_RELASE, download_urls_chromium
-from driver.common.info import Info
+from common.constants import LINK_CHROMEDDRIVER_LAST_RELASE
+from common.constants import download_urls_chromium
+from common.info import Info
+
 
 class Chrome(Info):
 
-    def __init__(self, url=LINK_CHROMEDDRIVER_LAST_RELASE):
+    def __init__(self, url: str = LINK_CHROMEDDRIVER_LAST_RELASE):
         super().__init__(url)
 
     def get_name(self) -> str:

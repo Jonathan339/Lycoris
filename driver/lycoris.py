@@ -1,15 +1,13 @@
-import glob
 import logging
 import os
 import requests
 import tarfile
 import zipfile
 
-from driver.common.constants import *
+from common.constants import chromium_executable
+from common.constants import firefox_executable
 from driver.chrome.chrome import Chrome
 from driver.firefox.firefox import Firefox
-from driver.common.info import Info
-
 
 from pathlib import Path
 
@@ -19,7 +17,7 @@ class Lycoris:
     def __init__(self, driver: str) -> None:
         self.driver = driver
         Path(self.folder_path()).mkdir(parents=True, exist_ok=True)
-        self.download_zip()
+        self.download_zip(self.driver_url())
 
     def instance_driver(self) -> None:
         """Return the instance of driver."""
@@ -31,6 +29,12 @@ class Lycoris:
         except Exception as e:
             logging.warning('[!] Error: {}'.format(e))
 
+    def driver_url(self) -> str:
+        try:
+            return self.instance_driver().get_link()
+        except Exception as e:
+           logging.warning('[!] Error: {}'.format(e))
+
     def folder_path(self) -> str:
         return os.path.normpath(str(Path.home()) + '/' + '.driver')
 
@@ -41,6 +45,9 @@ class Lycoris:
     def file_path(self) -> str:
         """ Returns the path of the file."""
         return os.path.normpath(self.folder_path() + '/' + self.local_filename())
+
+   
+
 
     def executable(self):
         """ Return the path of the executable."""
@@ -77,18 +84,18 @@ class Lycoris:
         except Exception as e:
             logging.warning('[!] Error: {}'.format(e))
 
-    def download_zip(self):
+    def download_zip(self, url):
         '''Download the driver for Chrome or Gecko.'''
         try:
             if self.driver == 'chrome' or self.driver == 'Chrome' or self.driver == 'CHROME':
                 if os.path.exists(self.folder_path()):
                     logging.warning('This takes a mule, thanks for waiting.')
-                    self.download(self.instance_driver().get_link())
+                    self.download(url)
                     self.extract_file()
             elif self.driver == 'gecko' or self.driver == 'Gecko' or self.driver == 'GECKO':
                 if os.path.exists(self.folder_path()):
                     logging.warning('This takes a mule, thanks for waiting.')
-                    self.download(self.instance_driver().get_link())
+                    self.download(url)
                     self.extract_file()
         except Exception as e:
             logging.warning('[!] Error: {}'.format(e))

@@ -8,7 +8,6 @@ sys.path.insert(0, dirname(dirname(__file__)))
 #--------------------------
 
 from driver.lycoris import Lycoris
-from driver.common.info import Info
 from driver.chrome.chrome import Chrome
 from driver.firefox.firefox import Firefox
 
