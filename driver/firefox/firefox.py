@@ -17,7 +17,7 @@ class Firefox(Info):
     def get_version(self) -> str:
         try:
             self._version = self.connection().find(
-                'div', {'class': 'f1 flex-auto min-width-0 text-normal'}).get_text("/", strip=True)
+                'span', {'class': 'css-truncate-target'}).get_text()
         except ConnectionError as e:
             logging.warning('[!] Error: {}'.format(e))
         return str(self._version)

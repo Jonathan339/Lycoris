@@ -10,6 +10,7 @@ sys.path.insert(0, dirname(dirname(__file__)))
 from driver.lycoris import Lycoris
 from driver.chrome.chrome import Chrome
 from driver.firefox.firefox import Firefox
+#
 
 print('-------------------------------------')
 #print(Windows().browser())
@@ -33,3 +34,5 @@ b = Lycoris('gecko')
 print(b.file_path())
 print(b.local_filename())
 print(b.executable())
+print(Chrome().info_driver())
+print(Firefox().info_driver())
