@@ -13,7 +13,6 @@ from pathlib import Path
 
 
 class Lycoris:
-
     def __init__(self, driver: str) -> None:
         self.driver = driver
         Path(self.folder_path()).mkdir(parents=True, exist_ok=True)
@@ -34,20 +33,6 @@ class Lycoris:
             return self.instance_driver().get_link()
         except Exception as e:
            logging.warning('[!] Error: {}'.format(e))
-
-    def folder_path(self) -> str:
-        return os.path.normpath(str(Path.home()) + '/' + '.driver')
-
-    def local_filename(self) -> str:
-        """ Return the file name."""
-        return self.instance_driver().get_link().split('/')[-1]
-
-    def file_path(self) -> str:
-        """ Returns the path of the file."""
-        return os.path.normpath(self.folder_path() + '/' + self.local_filename())
-
-   
-
 
     def executable(self):
         """ Return the path of the executable."""
