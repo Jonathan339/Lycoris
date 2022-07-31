@@ -1,8 +1,8 @@
 import logging
 
-from common.constants import LINK_GECKODRIVER
-from common.constants import download_urls_firefox
-from common.info import Info
+from common import LINK_GECKODRIVER
+from common import download_urls_firefox
+from common import Info
 
 
 class Firefox(Info):

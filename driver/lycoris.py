@@ -4,11 +4,9 @@ import requests
 import tarfile
 import zipfile
 
-from common.constants import chromium_executable
-from common.constants import firefox_executable
-from driver.chrome.chrome import Chrome
-from driver.firefox.firefox import Firefox
-
+from common import chromium_executable
+from common import firefox_executable
+from driver import Chrome
 from pathlib import Path
 
 

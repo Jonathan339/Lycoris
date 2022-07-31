@@ -3,9 +3,9 @@ import logging
 import requests
 
 from bs4 import BeautifulSoup
-from common.constants import LINK_CHROMEDDRIVER_LAST_RELASE
-from common.constants import download_urls_chromium
-from common.info import Info
+from common import LINK_CHROMEDDRIVER_LAST_RELASE
+from common import download_urls_chromium
+from common import Info
 
 
 class Chrome(Info):
