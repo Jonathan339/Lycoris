@@ -26,8 +26,7 @@ class Info:
             logging.warning('[!] Error: {}'.format(e))
         return soup
 
-
-    def match(self,  filter: str, other: str) -> str:
+    def match(self, filter: str, other: str) -> str:
         return filter in other
 
     def get_size(self, filename=None) -> int:
@@ -66,7 +65,3 @@ class Info:
                              # 'Size: ': self.get_size(),
                              'System: ': self.get_system()}
         return self._driver_data
-
-
-
-
