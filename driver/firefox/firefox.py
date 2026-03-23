@@ -5,6 +5,7 @@ import requests
 from common.constants import LINK_GECKODRIVER
 from common.constants import download_urls_firefox
 from common.info import Info
+from common.info import REQUEST_TIMEOUT_SECONDS
 
 
 class Firefox(Info):
@@ -17,7 +18,11 @@ class Firefox(Info):
 
     def get_version(self) -> str:
         try:
-            latest_release = requests.get(self._url, allow_redirects=True, timeout=15)
+            latest_release = requests.get(
+                self._url,
+                allow_redirects=True,
+                timeout=REQUEST_TIMEOUT_SECONDS,
+            )
             latest_release.raise_for_status()
             self._version = latest_release.url.rstrip('/').split('/')[-1]
         except requests.RequestException as exc:
@@ -32,9 +37,11 @@ class Firefox(Info):
         size = soup.find('small', {'class': 'text-gray flex-shrink-0'})
         return size.text if size else None
 
-    def get_link(self):
-        return download_urls_firefox[self.get_system()].format(
-            self.get_version(),
-            self.get_version(),
-            self.get_system(),
+    def get_link(self, version: str | None = None):
+        resolved_version = self.resolve_version(version)
+        system = self.get_system()
+        return download_urls_firefox[system].format(
+            resolved_version,
+            resolved_version,
+            system,
         )

@@ -7,7 +7,7 @@ README = (BASE_DIR / 'README.md').read_text(encoding='utf-8')
 
 setup(
     name='lycoris-driver',
-    version='0.1.0',
+    version='0.2.0',
     description='Download and expose ChromeDriver and GeckoDriver executables.',
     long_description=README,
     long_description_content_type='text/markdown',
@@ -19,5 +19,5 @@ setup(
         'lxml>=4.6',
         'requests>=2.23',
     ],
-    python_requires='>=3.8',
+    python_requires='>=3.10',
 )

@@ -26,5 +26,5 @@ class Chrome(Info):
             raise
         return self._version
 
-    def get_link(self) -> str:
-        return download_urls_chromium[self.get_system()].format(self.get_version())
+    def get_link(self, version: str | None = None) -> str:
+        return download_urls_chromium[self.get_system()].format(self.resolve_version(version))

@@ -49,6 +49,15 @@ class Info:
             return self._size
         return self._size
 
+    def resolve_version(self, version: str | None = None) -> str:
+        if version:
+            self._version = version
+            return self._version
+        if self._version:
+            return self._version
+        self._version = self.get_version()
+        return self._version
+
     def get_system(self) -> str:
         machine = platform.machine().lower()
         is_64_bit = machine in {'x86_64', 'amd64', 'arm64', 'aarch64'} or sys.maxsize > 2**31 - 1
@@ -65,7 +74,7 @@ class Info:
     def info_driver(self) -> dict:
         self._driver_data = {
             'Name': self.get_name(),
-            'Version': self.get_version(),
+            'Version': self.resolve_version(),
             'Link': self.get_link(),
             'System': self.get_system(),
         }
