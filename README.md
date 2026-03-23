@@ -1,39 +1,51 @@
-# Driver
+# Lycoris Driver
 
-The idea is to create an app that downloads the necessary driver either chromium or gecko to facilitate its use.
+Lycoris is a small Python package that downloads the browser driver you need
+(`chromedriver` or `geckodriver`) and returns the local executable path.
+
+## Features
+
+- Detects the current operating system.
+- Resolves the latest ChromeDriver or GeckoDriver download URL.
+- Downloads the archive into `~/.driver`.
+- Extracts the archive automatically.
+- Exposes the archive name and executable path.
+
+## Installation
+
+```bash
+pip install .
+```
 
 ## Usage
 
-> **Note**: When you run first time, it downloads a recent version of Chromium or Gecko.
+> **Note**: The first time you create a driver manager it downloads the latest
+> supported archive for your platform.
 
-**Example**: Get the name of the file and the path of the driver.
+```python
+from driver import Driver
 
-```py
-from driver.driver import Driver
+chrome = Driver('chrome')
+print(chrome.local_filename())
+print(chrome.executable())
 
-#Example chrome driver.
-a = Driver('chrome')
+firefox = Driver('gecko')
+print(firefox.local_filename())
+print(firefox.executable())
+```
 
-print(a.local_filename()) # Return the local file name.
-print(a.executable()) # Return the path of the driver.
+If you want to inspect metadata without downloading the archive immediately,
+you can disable the automatic download.
 
-#---------------------------------
-#output
+```python
+from driver import Lycoris
 
-chromedriver_win32.zip
-C:\Users\x\.driver\chromedriver.exe
+manager = Lycoris('chrome', auto_download=False)
+print(manager.driver_url())
+```
 
-#----------------------------------
-#Example firefox driver.
-b = Driver('gecko')
-print(b.file_path())
-print(b.local_filename())
-print(b.executable())
-#-----------------------------------
-#output
+## Running tests
 
-C:\Users\x\.driver\geckodriver-v0.23.0-win64.zip
-geckodriver-v0.23.0-win64.zip
-C:\Users\x\.driver\geckodriver.exe
-
+```bash
+python -m unittest discover -s test -p 'test*.py'
 ```

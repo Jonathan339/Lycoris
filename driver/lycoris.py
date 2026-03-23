@@ -1,86 +1,74 @@
 import logging
 import os
-import requests
 import tarfile
 import zipfile
+from pathlib import Path
+
+import requests
 
 from common.constants import chromium_executable
 from common.constants import firefox_executable
 from driver.chrome.chrome import Chrome
 from driver.firefox.firefox import Firefox
+from driver.resource import Resource
 
-from pathlib import Path
 
+class Lycoris(Resource):
+    def __init__(self, driver: str, auto_download: bool = True) -> None:
+        self.driver = driver.lower()
+        if self.driver not in {'chrome', 'gecko'}:
+            raise ValueError("driver must be either 'chrome' or 'gecko'")
 
-class Lycoris:
-    def __init__(self, driver: str) -> None:
-        self.driver = driver
         Path(self.folder_path()).mkdir(parents=True, exist_ok=True)
-        self.download_zip(self.driver_url())
+        if auto_download:
+            self.download_zip(self.driver_url())
 
-    def instance_driver(self) -> None:
-        """Return the instance of driver."""
-        try:
-            if self.driver == 'chrome' or self.driver == 'Chrome' or self.driver == 'CHROME':
-                return Chrome()
-            elif self.driver == 'gecko' or self.driver == 'Gecko' or self.driver == 'GECKO':
-                return Firefox()
-        except Exception as e:
-            logging.warning('[!] Error: {}'.format(e))
+    def instance_driver(self):
+        """Return a driver-specific helper instance."""
+        if self.driver == 'chrome':
+            return Chrome()
+        return Firefox()
 
     def driver_url(self) -> str:
-        try:
-            return self.instance_driver().get_link()
-        except Exception as e:
-           logging.warning('[!] Error: {}'.format(e))
+        return self.instance_driver().get_link()
 
     def executable(self):
-        """ Return the path of the executable."""
-        if str(self.instance_driver().__class__.__name__) == 'Chrome':
-            return os.path.normpath(chromium_executable[str(self.instance_driver().get_system())].format(self.folder_path()))
-        else:
-            return os.path.normpath(firefox_executable[str(self.instance_driver().get_system())].format(self.folder_path()))
+        """Return the path of the executable."""
+        system = self.instance_driver().get_system()
+        executable_map = (
+            chromium_executable if self.driver == 'chrome' else firefox_executable
+        )
+        return os.path.normpath(executable_map[system].format(self.folder_path()))
 
     def extract_file(self):
-        """ Extract files tar.gz and zip."""
-        try:
-            Path(self.folder_path()).mkdir(parents=True, exist_ok=True)
-            if os.path.exists(self.folder_path()):
-                if self.file_path().endswith('zip'):
-                    zip_file = zipfile.ZipFile(self.file_path())
-                    zip_file.extractall(self.folder_path())
-                    zip_file.close()
+        """Extract `.tar.gz` and `.zip` archives into the driver folder."""
+        archive_path = self.file_path()
+        Path(self.folder_path()).mkdir(parents=True, exist_ok=True)
 
-                if self.file_path().endswith('tar.gz'):
-                    tar = tarfile.open(self.file_path(), "r:gz")
-                    tar.extractall(self.folder_path())
-                    tar.close()
-        except Exception as e:
-            logging.warning('[!] Error: {}'.format(e))
+        if archive_path.endswith('.zip'):
+            with zipfile.ZipFile(archive_path) as zip_file:
+                zip_file.extractall(self.folder_path())
+            return
+
+        if archive_path.endswith('.tar.gz'):
+            with tarfile.open(archive_path, 'r:gz') as tar:
+                tar.extractall(self.folder_path())
+            return
+
+        raise ValueError(f'Unsupported archive format: {archive_path}')
 
     def download(self, url):
-        try:
-            r = requests.get(url, stream=True)
-            with open(self.file_path(), 'wb') as f:
-                for chunk in r.iter_content(chunk_size=1024):
-                    if chunk:
-                        f.write(chunk)
-            return self.file_path()
-        except Exception as e:
-            logging.warning('[!] Error: {}'.format(e))
+        response = requests.get(url, stream=True, timeout=30)
+        response.raise_for_status()
+        with open(self.file_path(), 'wb') as file_handle:
+            for chunk in response.iter_content(chunk_size=1024):
+                if chunk:
+                    file_handle.write(chunk)
+        return self.file_path()
 
     def download_zip(self, url):
-        '''Download the driver for Chrome or Gecko.'''
-        try:
-            if self.driver == 'chrome' or self.driver == 'Chrome' or self.driver == 'CHROME':
-                if os.path.exists(self.folder_path()):
-                    logging.warning('This takes a mule, thanks for waiting.')
-                    self.download(url)
-                    self.extract_file()
-            elif self.driver == 'gecko' or self.driver == 'Gecko' or self.driver == 'GECKO':
-                if os.path.exists(self.folder_path()):
-                    logging.warning('This takes a mule, thanks for waiting.')
-                    self.download(url)
-                    self.extract_file()
-        except Exception as e:
-            logging.warning('[!] Error: {}'.format(e))
+        """Download and extract the driver archive for Chrome or Gecko."""
+        logging.info('Downloading %s driver from %s', self.driver, url)
+        self.download(url)
+        self.extract_file()
+        return self.file_path()

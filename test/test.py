@@ -1,38 +1,44 @@
-#-----------------------------
-# add the file to the path
-import sys
+import tempfile
+import unittest
+from pathlib import Path
+from unittest import mock
 
-from os.path import dirname
-sys.path.insert(0, dirname(dirname(__file__)))
-
-#--------------------------
-
-from driver.lycoris import Lycoris
+from driver import Driver
 from driver.chrome.chrome import Chrome
 from driver.firefox.firefox import Firefox
-#
 
-print('-------------------------------------')
-#print(Windows().browser())
-print('-------------------------------------')
-print(Firefox().info_driver())
-print('-------------------------------------')
-print(Chrome().info_driver())
-print('-------------------------------------')
-print(Chrome().get_link())
-print(Chrome())
-print('https://chromedriver.storage.googleapis.com/2.43/chromedriver_win32.zip')
-# https://storage.googleapis.com/Win_x64/2.43/chrome-win32.zip
-# https://chromedriver.storage.googleapis.com/2.43/chromedriver_win32.zip
-print('-------------------------------------')
-a = Lycoris('chrome')
-print(a.local_filename())
-print(a.executable())
-print('-------------------------------------')
-b = Lycoris('gecko')
 
-print(b.file_path())
-print(b.local_filename())
-print(b.executable())
-print(Chrome().info_driver())
-print(Firefox().info_driver())
+class DriverTests(unittest.TestCase):
+    def test_driver_alias_extends_lycoris_behavior(self):
+        manager = Driver('chrome', auto_download=False)
+        self.assertEqual(manager.driver, 'chrome')
+
+    def test_executable_uses_platform_mapping(self):
+        manager = Driver('chrome', auto_download=False)
+        with mock.patch.object(Chrome, 'get_system', return_value='linux64'):
+            self.assertTrue(manager.executable().endswith('chromedriver'))
+
+    def test_local_filename_uses_driver_link(self):
+        manager = Driver('gecko', auto_download=False)
+        with mock.patch.object(Firefox, 'get_link', return_value='https://example.com/geckodriver.zip'):
+            self.assertEqual(manager.local_filename(), 'geckodriver.zip')
+
+    def test_download_writes_archive(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            manager = Driver('chrome', auto_download=False)
+            with mock.patch.object(manager, 'folder_path', return_value=tmpdir):
+                with mock.patch.object(manager, 'local_filename', return_value='chromedriver.zip'):
+                    response = mock.Mock()
+                    response.iter_content.return_value = [b'abc', b'def']
+                    response.raise_for_status.return_value = None
+                    with mock.patch('driver.lycoris.requests.get', return_value=response):
+                        file_path = manager.download('https://example.com/chromedriver.zip')
+                        self.assertEqual(Path(file_path).read_bytes(), b'abcdef')
+
+    def test_invalid_driver_raises_value_error(self):
+        with self.assertRaises(ValueError):
+            Driver('safari', auto_download=False)
+
+
+if __name__ == '__main__':
+    unittest.main()
